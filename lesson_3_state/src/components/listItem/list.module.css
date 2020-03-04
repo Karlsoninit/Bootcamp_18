@@ -1,0 +1,16 @@
+.ListContainerSmall {
+  width: 600px;
+  border: 1px solid green;
+  padding: 10px;
+  background-color: rgb(189, 22, 22);
+}
+
+.ListContainerLarge {
+  composes: ListContainerSmall;
+  width: 900px;
+  background-color: rgb(0, 255, 42);
+}
+
+.image {
+  width: 100%;
+}
