@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import shortId from "shortid";
 import PropTypes from "prop-types";
-
 import Form from "./components/form/Form";
 import List from "./components/list/List";
 import CustomSelect from "./ui/CustomSelect";
@@ -16,7 +14,6 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount");
-    console.log(this.props.tasks);
     this.setState({ todos: this.props.tasks });
   }
 
@@ -31,7 +28,6 @@ class App extends Component {
   }
 
   getValue = value => {
-    console.log(value);
     this.setState(prev => ({
       todos: [value, ...prev.todos]
     }));
@@ -47,7 +43,6 @@ class App extends Component {
 
   handleChoose = e => {
     this.setState(prev => {
-      console.log(prev.choose, "---- ", e.value);
       if (prev.choose !== e.value) {
         return {
           choose: e.value
@@ -68,9 +63,8 @@ class App extends Component {
   };
 
   render() {
-    console.log("re-render");
     const { todos, toggle, filterTodo, choose } = this.state;
-    console.log("filterTodo", filterTodo);
+    console.log("render App");
     return (
       <>
         <CustomSelect handleChoose={this.handleChoose} value={choose} />

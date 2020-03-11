@@ -48,6 +48,7 @@ class Form extends Component {
   };
 
   render() {
+    console.log("render Form");
     // const classes = styles();
     const { name, todo, description } = this.state;
     return (

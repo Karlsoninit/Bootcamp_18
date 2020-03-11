@@ -12,7 +12,7 @@ const options = [
 const find = value => options.find(el => el.value === value);
 
 const CustomSelect = ({ handleChoose, value }) => {
-  console.log("value", value);
+  console.log("render CustomSelect");
   return (
     <Select
       options={options}
