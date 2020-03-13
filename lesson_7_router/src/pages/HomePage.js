@@ -1,6 +1,6 @@
 // import { Route, Link, Switch } from "react-router-dom";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import axios from "axios";
 
 class HomePage extends Component {
@@ -10,7 +10,7 @@ class HomePage extends Component {
 
   async componentDidMount() {
     const data = await axios.get(
-      "http://newsapi.org/v2/everything?q=bitcoin&from=2020-02-12&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
+      "http://newsapi.org/v2/everything?q=apple&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
     );
     console.log(data.data.articles);
     this.setState({
@@ -28,7 +28,7 @@ class HomePage extends Component {
               <Link
                 to={{
                   pathname: `/home/${article.publishedAt}`,
-                  search: "?category=adventure",
+                  search: "?category=adventure&city=USA",
                   hash: "#treasure-island",
                   state: { from: news }
                 }}

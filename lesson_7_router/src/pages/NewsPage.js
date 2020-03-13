@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import queryString from "query-string";
+import { Link, Route } from "react-router-dom";
+import ContentPage from "./ContentPage";
 
 class NewsPage extends Component {
   state = {
@@ -8,7 +11,7 @@ class NewsPage extends Component {
 
   async componentDidMount() {
     const data = await axios.get(
-      "http://newsapi.org/v2/everything?q=bitcoin&from=2020-02-12&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
+      "http://newsapi.org/v2/everything?q=apple&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
     );
     console.log(data.data.articles);
     const findArticle = data.data.articles.find(
@@ -22,15 +25,32 @@ class NewsPage extends Component {
 
   render() {
     const { article } = this.state;
-    console.log(article);
-    console.log(this.props);
+
+    console.log("--- ! ---", this.props);
+
+    const parse = queryString.parse(this.props.location.search);
+    console.log(parse);
     return (
       <>
+        <h2>news Page</h2>
         {article && (
           <>
             <h2>{article.title}</h2>
             <p>{article.description}</p>
             <img style={{ width: 500 }} alt="news" src={article.urlToImage} />
+            <Link
+              to={{
+                pathname: `/home/:${this.props.match.params.id}/content`,
+                state: article.content
+              }}
+            >
+              Content
+            </Link>
+            <Route
+              exact
+              path={`/home/:${this.props.match.params.id}/content`}
+              component={ContentPage}
+            />
           </>
         )}
       </>

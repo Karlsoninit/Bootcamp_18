@@ -13,7 +13,7 @@ export const useRouter = isAuthentication => {
       <Switch>
         <Route exact path="/home" component={HomePage} />
         <Route path="/home/:id" component={NewsPage} />
-        {/* <Redirect to="/home" /> */}
+        <Redirect to="/home" />
       </Switch>
     );
   }
