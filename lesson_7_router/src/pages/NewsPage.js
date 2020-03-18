@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+
 import queryString from "query-string";
-import { Link, Route } from "react-router-dom";
+import { Link, Route, withRouter } from "react-router-dom";
 import ContentPage from "./ContentPage";
 
 class NewsPage extends Component {
@@ -10,13 +10,10 @@ class NewsPage extends Component {
   };
 
   async componentDidMount() {
-    const data = await axios.get(
-      "http://newsapi.org/v2/everything?q=apple&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
-    );
-    console.log(data.data.articles);
-    const findArticle = data.data.articles.find(
-      article => article.publishedAt === this.props.match.params.id
-    );
+    const findArticle = this.props.location.state.news.find(article => {
+      console.log(article.id === this.props.match.params.id);
+      return article.id === this.props.match.params.id;
+    });
 
     this.setState({
       article: findArticle
@@ -25,11 +22,8 @@ class NewsPage extends Component {
 
   render() {
     const { article } = this.state;
+    queryString.parse(this.props.location.search);
 
-    console.log("--- ! ---", this.props);
-
-    const parse = queryString.parse(this.props.location.search);
-    console.log(parse);
     return (
       <>
         <h2>news Page</h2>
@@ -58,4 +52,4 @@ class NewsPage extends Component {
   }
 }
 
-export default NewsPage;
+export default withRouter(NewsPage);

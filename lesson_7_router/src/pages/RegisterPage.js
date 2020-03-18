@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+
 import db from "../config";
+import { withRouter } from "react-router-dom";
 
 class RegisterPage extends Component {
   state = {
@@ -61,4 +63,4 @@ class RegisterPage extends Component {
   }
 }
 
-export default RegisterPage;
+export default withRouter(RegisterPage);

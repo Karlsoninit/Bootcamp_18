@@ -1,46 +1,72 @@
 // import { Route, Link, Switch } from "react-router-dom";
-import React, { Component } from "react";
+import React, { Component, lazy, Suspense } from "react";
 import { Link, Route } from "react-router-dom";
-import axios from "axios";
+import * as services from "../srvices";
+// import Loadable from "react-loadable";
 
+// const LoadableDrawer = Loadable({
+//   loader: () => import("../ui/Drawer" /* webpackChunkName: 'DrowerMenu' */),
+//   loading() {
+//     return <div>Loading...</div>;
+//   }
+// });
+const LoadableDrawer = lazy(() =>
+  import("../ui/Drawer" /* webpackChunkName: 'DrowerMenu' */)
+);
+const LoadablePageNotFound = lazy(() =>
+  import("./PageNotFound" /* webpackChunkName: 'PageNotFound' */)
+);
 class HomePage extends Component {
   state = {
-    news: null
+    news: null,
+    isOpen: false
+  };
+
+  handleOpenform = () => {
+    this.setState(prev => ({
+      isOpen: !prev.isOpen
+    }));
   };
 
   async componentDidMount() {
-    const data = await axios.get(
-      "http://newsapi.org/v2/everything?q=apple&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f"
-    );
-    console.log(data.data.articles);
+    console.log("key", process.env.REACT_APP_API_KEY);
     this.setState({
-      news: data.data.articles
+      news: await services.fetcher()
     });
   }
 
   render() {
-    const { news } = this.state;
+    const { news, isOpen } = this.state;
+    console.log(news);
     return (
       <>
+        <Suspense fallback={<p>Loading ...</p>}>
+          <LoadablePageNotFound />
+          <button onClick={this.handleOpenform}>SHOW</button>
+          {isOpen && <LoadableDrawer />}
+        </Suspense>
+
         {news &&
-          news.map(article => (
-            <li key={article.url}>
-              <Link
-                to={{
-                  pathname: `/home/${article.publishedAt}`,
-                  search: "?category=adventure&city=USA",
-                  hash: "#treasure-island",
-                  state: { from: news }
-                }}
-              >
-                <img
-                  style={{ width: 300 }}
-                  alt="news"
-                  src={article.urlToImage}
-                />
-              </Link>
-            </li>
-          ))}
+          news.map(article => {
+            return (
+              <li key={article.id}>
+                <Link
+                  to={{
+                    pathname: `/home/${article.id}`,
+                    search: "?category=adventure&city=USA",
+                    hash: "#treasure-island",
+                    state: { news }
+                  }}
+                >
+                  <img
+                    style={{ width: 300 }}
+                    alt="news"
+                    src={article.urlToImage}
+                  />
+                </Link>
+              </li>
+            );
+          })}
       </>
     );
   }

@@ -1,29 +1,53 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-
+// import Loadable from "react-loadable";
 import HomePage from "./pages/HomePage";
 import ContactPage from "./pages/ContactPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+
+// /* webpackChunkName: 'Login' */
 import NewsPage from "./pages/NewsPage";
+// import Loading from "./ui/Loader";
+const test = "work";
+
+const LazyLogin = lazy(() =>
+  import("./pages/LoginPage" /* webpackChunkName: 'Login' */)
+);
+const LazyRegister = lazy(() =>
+  import("./pages/RegisterPage" /* webpackChunkName: 'Register' */)
+);
 
 export const useRouter = isAuthentication => {
   if (isAuthentication) {
     return (
       <Switch>
-        <Route exact path="/home" component={HomePage} />
-        <Route path="/home/:id" component={NewsPage} />
+        <Route exact path="/home">
+          <HomePage test={test} />
+        </Route>
+        <Route path="/home/:id">
+          <>
+            <NewsPage />
+          </>
+        </Route>
         <Redirect to="/home" />
       </Switch>
     );
   }
 
   return (
-    <Switch>
-      <Route path="/login" component={LoginPage} />
-      <Route path="/register" component={RegisterPage} />
-      <Route path="/contact" component={ContactPage} />
-      <Redirect to="/login" />
-    </Switch>
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/login">
+            <LazyLogin />
+          </Route>
+
+          <Route path="/register">
+            <LazyRegister />
+          </Route>
+          <Route path="/contact" component={ContactPage} />
+          <Redirect to="/login" />
+        </Switch>
+      </Suspense>
+    </>
   );
 };

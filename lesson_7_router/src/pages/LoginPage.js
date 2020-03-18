@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import db from "../config";
+import { withRouter } from "react-router-dom";
 
 class LoginPage extends Component {
   state = {
@@ -55,7 +56,12 @@ class LoginPage extends Component {
           <button type="submit">Submit</button>
         </form>
         {/* {message ? <h2>{message}</h2> : <h2>welcome !!</h2>} */}
-        <button onClick={() => this.props.history.push("/register")}>
+        <button
+          onClick={() => {
+            console.log(this.props);
+            this.props.history.push("/register");
+          }}
+        >
           register
         </button>
       </>
@@ -63,4 +69,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);
