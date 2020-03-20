@@ -1,17 +1,23 @@
-import React, { createContext } from "react";
-import Notes from "./components/notes/Notes";
+import React, { createContext, lazy, Suspense } from "react";
+import { Spinner } from "./ui/spinner";
+
+const NotesLazy = lazy(() =>
+  import("./components/notes/Notes" /* webpackChunkName: "Notes"*/)
+);
 
 export const DefaultContext = createContext();
 
 function App() {
   return (
-    <DefaultContext.Provider
-      value={{
-        theme: "dark"
-      }}
-    >
-      <Notes />
-    </DefaultContext.Provider>
+    <Suspense fallback={<Spinner type="Grid" color="red" time={3000} />}>
+      <DefaultContext.Provider
+        value={{
+          theme: "white"
+        }}
+      >
+        <NotesLazy />
+      </DefaultContext.Provider>
+    </Suspense>
   );
 }
 

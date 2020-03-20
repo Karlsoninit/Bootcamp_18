@@ -20,15 +20,17 @@ const useStyles = makeStyles({
 // приимает note
 
 export default function ListItem(props) {
-  console.log("props ", props);
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card
+      className={classes.root}
+      style={{ backgroundColor: props.theme === "dark" ? "black" : "white" }}
+    >
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="../../images/notetaking.jpeg"
+          image="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fa57.foxnews.com%2Fstatic.foxnews.com%2Ffoxnews.com%2Fcontent%2Fuploads%2F2019%2F08%2F696%2F392%2FChuck-Lorre_TCA.jpg%3Fve%3D1%26tl%3D1&f=1&nofb=1"
           title="Contemplative Reptile"
         />
         <CardContent>
