@@ -1,18 +1,48 @@
 import React from "react";
 import { connect } from "react-redux";
-
-function App() {
+import { increment, decrement } from "./redux/actions";
+function App(props) {
+  console.log("props", props);
   return (
     <div style={{ width: 300, margin: "auto" }}>
-      <button>Increment</button>
-      <h2>0</h2>
-      <button>Decrement</button>
+      <button onClick={() => props.increment(5)}>Increment</button>
+      <h2>{props.count}</h2>
+      <button onClick={() => props.decrement(5)}>Decrement</button>
     </div>
   );
 }
 
-const mapStateToProps = state => ({});
+const mapSTP = state => {
+  console.log(state);
+  return {
+    count: state
+  };
+};
 
-const mapDispatchToProps = {};
+// const mapDTP = dispatch => ({
+//   plus: sum =>
+//     dispatch({
+//       type: "INCREMENT",
+//       payload: sum
+//     }),
+//   minus: sum =>
+//     dispatch({
+//       type: "DECREMENT",
+//       payload: sum
+//     })
+// });
 
-export default connect()(App);
+// const mapDTP = {
+//   increment,
+//   decrement
+// };
+
+export default connect(mapSTP, { increment, decrement })(App);
+
+// const connect = (mapStateToProps, mapDispatchToProps) => BaseComponent => {
+//   return class Connect extends Component {
+//     render() {
+//       return <BaseComponent />;
+//     }
+//   };
+// };
