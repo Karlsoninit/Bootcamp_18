@@ -1,5 +1,10 @@
-import { createStore } from "redux";
-import { reducer } from "./reducers";
+import { createStore, combineReducers } from "redux";
+import { notes, token } from "./reducers";
 import { devToolsEnhancer } from "redux-devtools-extension";
 
-export const store = createStore(reducer, devToolsEnhancer());
+const rootReducer = combineReducers({
+  notes,
+  token
+});
+
+export const store = createStore(rootReducer, devToolsEnhancer());

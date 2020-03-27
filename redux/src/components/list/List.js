@@ -1,6 +1,25 @@
 import React from "react";
 import styles from "./list.module.css";
-//принимает notes и перебирает
-const List = () => <div className={styles.notesContainer}></div>;
+import { connect } from "react-redux";
+import ListItem from "../listItems/ListItem";
 
-export default List;
+//принимает notes и перебирает
+const List = props => {
+  console.log("props", props);
+  return (
+    <div className={styles.notesContainer}>
+      {props.notes.map(note => (
+        <ListItem key={note.id} data={note} />
+      ))}
+    </div>
+  );
+};
+
+const mapSTP = state => {
+  console.log(state);
+  return {
+    notes: state.notes
+  };
+};
+
+export default connect(mapSTP)(List);
