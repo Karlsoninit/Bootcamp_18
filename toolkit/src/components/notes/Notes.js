@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Form from "../form/Form";
+import Form from "../form/formContainer";
 import List from "../list/List";
 
 class Notes extends Component {

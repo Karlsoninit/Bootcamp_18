@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 // приимает note
 
-export default function ListItem() {
+export default function ListItem({ data }) {
   const classes = useStyles();
 
   return (
@@ -32,7 +32,7 @@ export default function ListItem() {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {data.note}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             Lizards are a widespread group of squamate reptiles, with over 6,000

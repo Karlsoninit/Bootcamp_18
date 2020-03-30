@@ -9,6 +9,7 @@ class Form extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    this.props.addNotes({ note: this.state.note });
   };
 
   handleChange = e => {
