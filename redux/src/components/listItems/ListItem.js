@@ -7,8 +7,6 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { connect } from "react-redux";
-import { deleteNote } from "../redux/actions";
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +21,11 @@ const useStyles = makeStyles({
 
 function ListItem(props) {
   const classes = useStyles();
+
+  const handleClick = async () => {
+    await props.delTask(props.data.id);
+    // await props.getTask();
+  };
 
   return (
     <Card className={classes.root}>
@@ -43,11 +46,7 @@ function ListItem(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button
-          onClick={() => props.deleteNote(props.data.id)}
-          size="small"
-          color="primary"
-        >
+        <Button onClick={handleClick} size="small" color="primary">
           Delete
         </Button>
       </CardActions>
@@ -55,8 +54,4 @@ function ListItem(props) {
   );
 }
 
-const mapDTP = {
-  deleteNote
-};
-
-export default connect(null, mapDTP)(ListItem);
+export default ListItem;

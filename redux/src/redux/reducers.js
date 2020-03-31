@@ -14,14 +14,17 @@ import types from "./types";
 export const token = (state = null, { type, payload }) => {
   switch (type) {
     case types.ADD_NOTE:
-      return payload.note;
+      return "await token ...";
     default:
       return state;
   }
 };
 
 const handlers = {
-  [types.ADD_NOTE]: (state, { payload }) => [...state, payload],
+  [types.ADD_NOTE]: (state, { payload }) => {
+    console.log("payload", payload);
+    return payload;
+  },
   [types.DELETE_NOTE]: (state, { payload }) =>
     state.filter(note => note.id !== payload),
   DEFAULT: state => state

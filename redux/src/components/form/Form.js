@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import shortId from "shortid";
 import styles from "./form.module.css";
-import { addNotes } from "../redux/actions";
+import { addNotes } from "../../redux/actions";
+import { putTask, getTask } from "../../redux/operations";
 
 const initialState = {
   note: ""
@@ -14,18 +15,23 @@ class Form extends Component {
     ...initialState
   };
 
-  handleSubmit = e => {
+  componentDidMount() {
+    this.props.getTask();
+  }
+
+  handleSubmit = async e => {
     e.preventDefault();
     // call reducer fn
 
     const note = {
-      note: this.state.note,
-      id: shortId()
+      note: this.state.note
     };
     // if (this.state.note) {
     //   this.props.addNotes(note);
     // }
-    this.props.addNotes(note);
+    await this.props.putTask(note);
+
+    await this.props.getTask();
   };
 
   handleChange = e => {
@@ -53,4 +59,4 @@ class Form extends Component {
   }
 }
 
-export default connect(null, { addNotes })(Form);
+export default connect(null, { putTask, getTask })(Form);

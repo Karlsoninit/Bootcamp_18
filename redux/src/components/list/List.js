@@ -1,11 +1,10 @@
 import React from "react";
 import styles from "./list.module.css";
 import { connect } from "react-redux";
-import ListItem from "../listItems/ListItem";
-
+import ListItem from "../listItems/listItemContainer";
+import { getNotes } from "../../redux/selectors";
 //принимает notes и перебирает
 const List = props => {
-  console.log("props", props);
   return (
     <div className={styles.notesContainer}>
       {props.notes.map(note => (
@@ -16,9 +15,8 @@ const List = props => {
 };
 
 const mapSTP = state => {
-  console.log(state);
   return {
-    notes: state.notes
+    notes: getNotes(state)
   };
 };
 
