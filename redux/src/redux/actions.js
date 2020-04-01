@@ -8,3 +8,8 @@ export const deleteNote = id => ({
   type: types.DELETE_NOTE,
   payload: id
 });
+
+export const filterNote = value => ({
+  type: types.FILTER_NOTE,
+  payload: value
+});

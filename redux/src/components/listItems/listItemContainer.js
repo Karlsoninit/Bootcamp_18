@@ -7,4 +7,8 @@ const mapDTP = {
   getTask
 };
 
-export default connect(null, mapDTP)(ListItem);
+const mapSTP = state => ({
+  token: state.token
+});
+
+export default connect(mapSTP, mapDTP)(ListItem);

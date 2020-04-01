@@ -7,9 +7,11 @@ import { getNotes } from "../../redux/selectors";
 const List = props => {
   return (
     <div className={styles.notesContainer}>
-      {props.notes.map(note => (
-        <ListItem key={note.id} data={note} />
-      ))}
+      {props.notes.filterNotes.length
+        ? props.notes.filterNotes.map(note => (
+            <ListItem key={note.id} data={note} />
+          ))
+        : props.notes.notes.map(note => <ListItem key={note.id} data={note} />)}
     </div>
   );
 };

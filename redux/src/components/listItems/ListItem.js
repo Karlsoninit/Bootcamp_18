@@ -46,9 +46,11 @@ function ListItem(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button onClick={handleClick} size="small" color="primary">
-          Delete
-        </Button>
+        {props.token && (
+          <Button onClick={handleClick} size="small" color="primary">
+            Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

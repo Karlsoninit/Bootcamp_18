@@ -3,8 +3,9 @@ import { notes, token } from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
-// import { logger } from "../middlewares/logger";
 import thunk from "redux-thunk";
+
+// import { logger } from "../middlewares/logger";
 
 const persistConfig = {
   key: "notes",
@@ -14,11 +15,9 @@ const persistConfig = {
 
 const middlewares = [thunk];
 
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-
 if (process.env.NODE_ENV === `development`) {
   const { logger } = require(`redux-logger`);
-
+  // const { logger } = require(`../middlewares/logger`);
   middlewares.push(logger);
 }
 

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import TextField from "@material-ui/core/TextField";
-import shortId from "shortid";
 import styles from "./form.module.css";
 import { addNotes } from "../../redux/actions";
 import { putTask, getTask } from "../../redux/operations";
@@ -10,14 +9,20 @@ const initialState = {
   note: ""
 };
 
+console.log("Component", Component);
+
 class Form extends Component {
   state = {
     ...initialState
   };
 
-  componentDidMount() {
-    this.props.getTask();
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     ...initialState
+  //   };
+  //   this.handleSubmit = this.handleSubmit.bind(this);
+  // }
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -41,22 +46,28 @@ class Form extends Component {
   };
 
   render() {
+    const { token } = this.props;
     return (
       <div className={styles.container}>
-        <form onSubmit={this.handleSubmit} noValidate autoComplete="off">
-          <TextField
-            className={styles.input}
-            id="outlined-basic"
-            label="Outlined"
-            variant="outlined"
-            name="note"
-            onChange={this.handleChange}
-            type="text"
-          />
-        </form>
+        {token && (
+          <form onSubmit={this.handleSubmit} noValidate autoComplete="off">
+            <TextField
+              className={styles.input}
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              name="note"
+              onChange={this.handleChange}
+              type="text"
+            />
+          </form>
+        )}
       </div>
     );
   }
 }
+const mapSTP = state => ({
+  token: state.token
+});
 
-export default connect(null, { putTask, getTask })(Form);
+export default connect(mapSTP, { putTask, getTask })(Form);
