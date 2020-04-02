@@ -7,6 +7,10 @@ class Form extends Component {
     note: ""
   };
 
+  // componentDidMount() {
+  //   this.props.updateNotes();
+  // }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.addNotes({ note: this.state.note });
