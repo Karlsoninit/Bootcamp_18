@@ -5,3 +5,4 @@ export const updateNotes = createAction("UPDATE_NOTES");
 export const getToken = createAction("GET_TOKEN");
 export const getUserInfo = createAction("GET_USER_INFO");
 export const error = createAction("USER_ERROR");
+export const logOut = createAction("USER_LOGOUT");

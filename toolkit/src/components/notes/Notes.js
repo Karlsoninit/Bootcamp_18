@@ -1,13 +1,27 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import Form from "../form/formContainer";
-import List from "../list/List";
-import Register from "../auth/register/Register";
+import LoginPage from "../../pages/LoginPage";
+import RegisterPage from "../../pages/RegisterPage";
+import HomePage from "../../pages/HomePage";
 
 const useRouter = token => {
   if (token) {
+    return (
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Redirect to="/" />
+      </Switch>
+    );
   }
+
+  return (
+    <Switch>
+      <Route path="/register" component={RegisterPage} />
+      <Route path="/login" component={LoginPage} />
+      <Redirect to="/login" />
+    </Switch>
+  );
 };
 
 class Notes extends Component {
@@ -15,20 +29,10 @@ class Notes extends Component {
     notes: ""
   };
 
-  getNoteInfo = note => {
-    // принимает note и пушит в массив notes
-  };
-
   render() {
     const { isAuth } = this.props;
-    return isAuth ? (
-      <>
-        <Form />
-        <List />
-      </>
-    ) : (
-      <Register />
-    );
+    const routing = useRouter(isAuth);
+    return routing;
   }
 }
 

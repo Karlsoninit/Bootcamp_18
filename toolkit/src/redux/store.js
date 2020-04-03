@@ -10,7 +10,8 @@ import { notes, auth } from "./reducers";
 
 const persistConfig = {
   key: "root",
-  storage
+  storage,
+  whitelist: ["auth"]
 };
 
 const rootReducer = combineReducers({

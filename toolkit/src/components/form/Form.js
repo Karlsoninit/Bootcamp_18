@@ -7,13 +7,10 @@ class Form extends Component {
     note: ""
   };
 
-  // componentDidMount() {
-  //   this.props.updateNotes();
-  // }
-
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    this.props.addNotes({ note: this.state.note });
+    await this.props.putData({ note: this.state.note });
+    await this.props.getData();
   };
 
   handleChange = e => {
