@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 345,
   },
   media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
+    height: 400,
+    // paddingTop: "56.25%", // 16:9
   },
   expand: {
     transform: "rotate(0deg)",
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function RecipeReviewCard() {
+export default function CardList({ title, sku }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -60,12 +60,12 @@ export default function RecipeReviewCard() {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
+        title={title}
         subheader="September 14, 2016"
       />
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
+        image={require(`../static/products/${sku}_1.jpg`)}
         title="Paella dish"
       />
       <CardContent>
