@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+
 import { ShopContext } from "../../context/shopContext";
 import CardList from "../../ui/Card";
 
@@ -12,6 +13,7 @@ const Cart = () => {
     <div style={{ border: "1px solid red" }}>
       <h2>CART</h2>
       <button onClick={handleOpen}>CART</button>
+      <h2>{state.quantity}</h2>
       {isOpen &&
         state.cart.map((product) => (
           <CardList key={product.id} product={product} />

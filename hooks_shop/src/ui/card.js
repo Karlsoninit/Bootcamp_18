@@ -17,6 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { ShopContext } from "../context/shopContext";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { addToCart } from "../context/actions";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -80,9 +81,7 @@ export default function CardList({ product }) {
       <CardActions disableSpacing>
         <IconButton
           aria-label="add to favorites"
-          onClick={() =>
-            dispatch({ type: "addToCart", payload: { ...product, count: 1 } })
-          }
+          onClick={() => dispatch(addToCart(product))}
         >
           <AddShoppingCartIcon />
         </IconButton>
