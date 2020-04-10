@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import Card from "./components/Card";
+
 export default function App() {
   const [value, setValue] = useState("football");
   const [news, setNews] = useState([]);
@@ -21,10 +22,8 @@ export default function App() {
   }, []);
 
   const getNews = async () => {
-    const choose = () => (value ? value : "cat");
-
     const data = await axios.get(
-      `http://newsapi.org/v2/everything?q=${value}&from=2020-03-09&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f`
+      `http://newsapi.org/v2/everything?q=${value}&sortBy=publishedAt&apiKey=ed5ebee752754cf7a93918ae83acba6f`
     );
     setNews(data.data.articles);
   };

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 
 const Card = ({ news }) => (
   <View style={{ height: "80%", paddingTop: 50, paddingBottom: 50 }}>
@@ -19,7 +20,8 @@ const Card = ({ news }) => (
           <View style={{ marginHorizontal: 10 }}>
             <TouchableOpacity
               activeOpacity={0.1}
-              onLongPress={() => Alert.alert(item.url)}
+              // onLongPress={() => Alert.alert(item.url)}
+              onLongPress={() => WebBrowser.openBrowserAsync(item.url)}
             >
               <Image
                 source={{ uri: item.urlToImage }}
