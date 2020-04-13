@@ -1,81 +1,97 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Platform,
-  Alert,
-  TextInput,
-} from "react-native";
+import { StyleSheet, Platform, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { HomeScreen } from "./screens/HomeScreen";
+import { BlogScreen } from "./screens/BlogScreen";
+import { ProfileScreen } from "./screens/ProfileScreen";
+import { LoginScreen } from "./screens/LoginScreen";
+import { MainScreen } from "./screens/tab/MainScreen";
+import { MapScreen } from "./screens/tab/MapScreen";
+import { CreateScreen } from "./screens/tab/CreateScreen";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({ navigation }) => {
-  console.log("navigation", navigation);
-  const [textValue, setTextValue] = useState("");
+// const content = (
+//   <Stack.Navigator>
+//     <Stack.Screen
+//       options={{
+//         headerTitleAlign: "center",
+//         headerTitle: "My screen",
+//         headerStyle: {
+//           backgroundColor: Platform.OS === "ios" ? "white" : "blue",
+//         },
+//         headerTintColor: Platform.OS === "ios" ? "blue" : "white",
+//       }}
+//       name="Home"
+//       component={HomeScreen}
+//     />
+//     <Stack.Screen name="Profile" component={ProfileScreen} />
+//     <Stack.Screen name="Blog" component={BlogScreen} />
+//   </Stack.Navigator>
+// );
 
-  return (
-    <View style={styles.container}>
-      <TextInput placeholder="enterrrrrr ....." onChangeText={setTextValue} />
-      <Text>HomeScreen</Text>
-      <Button
-        title="Go to profile"
-        onPress={() => navigation.navigate("Profile", { nickName: textValue })}
-      />
-    </View>
-  );
-};
+let content = (
+  <Tab.Navigator
+    tabBarOptions={{
+      showLabel: false,
+    }}
+  >
+    <Tab.Screen
+      options={{
+        tabBarIcon: ({ focused, size, color }) => (
+          <Ionicons name="ios-beer" size={focused ? 35 : size} color={color} />
+        ),
+      }}
+      name="Main"
+      component={MainScreen}
+    />
+    <Tab.Screen
+      options={{
+        tabBarIcon: ({ focused, size, color }) => (
+          <Ionicons
+            name="ios-add-circle-outline"
+            size={focused ? 42 : 40}
+            color={"red"}
+          />
+        ),
+      }}
+      name="Create"
+      component={CreateScreen}
+    />
+    <Tab.Screen
+      options={{
+        tabBarIcon: ({ focused, size, color }) => (
+          <Ionicons
+            name="ios-planet"
+            size={focused ? 35 : size}
+            color={color}
+          />
+        ),
+      }}
+      name="Map"
+      component={MapScreen}
+    />
+  </Tab.Navigator>
+);
 
-const ProfileScreen = ({ navigation, route }) => {
-  return (
-    <View style={styles.container}>
-      <Text>{route.params.nickName}</Text>
-    </View>
-  );
+const useRoute = (isAuth) => {
+  if (isAuth) {
+    return content;
+  }
+  return (content = (
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  ));
 };
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{
-            headerTitleAlign: "center",
-            headerTitle: "My screen",
-            headerStyle: {
-              backgroundColor: Platform.OS === "ios" ? "white" : "blue",
-            },
-            headerTintColor: Platform.OS === "ios" ? "blue" : "white",
-            headerLeft: () => (
-              <Ionicons
-                style={{
-                  marginLeft: 30,
-                }}
-                name="ios-basket"
-                size={32}
-                color="green"
-                onPress={() => Alert.alert("basket")}
-              />
-            ),
-          }}
-          name="Home"
-          component={HomeScreen}
-        />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+  const [isAuth, setIsAuth] = useState(true);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+  const routing = useRoute(true);
+  return <NavigationContainer>{routing}</NavigationContainer>;
+}
