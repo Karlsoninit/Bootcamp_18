@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Platform, Button } from "react-native";
+import { StyleSheet, Platform, Button, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -86,10 +86,19 @@ const useRoute = (isAuth) => {
   if (isAuth) {
     return content;
   }
+
   return (content = (
     <Stack.Navigator>
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          // headerBackground: () => (
+          //   <Image
+          //     style={{ height: 90 }}
+          //     source={require("./assets/images/triangles.png")}
+          //   />
+          // ),
+        }}
         name="Login"
         component={LoginScreen}
       />
@@ -104,5 +113,6 @@ const useRoute = (isAuth) => {
 
 export default function App() {
   const routing = useRoute(false);
+
   return <NavigationContainer>{routing}</NavigationContainer>;
 }

@@ -8,30 +8,47 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Image,
+  ImageBackground,
 } from "react-native";
 
 export const LoginScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
+      <ImageBackground
+        source={require("../assets/images/triangles.png")}
+        style={styles.image}
       >
-        <View>
-          <TextInput placeholder="email" />
-          <TextInput secureTextEntry={true} placeholder="password" />
-          <Button title="go to Register" onPress={() => Keyboard.dismiss()} />
-        </View>
-      </KeyboardAvoidingView>
+        <KeyboardAvoidingView
+          behavior={Platform.Os == "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <View>
+            <TextInput placeholder="email" />
+            <TextInput secureTextEntry={true} placeholder="password" />
+            <Button
+              title="go to Register"
+              onPress={() => {
+                Keyboard.dismiss();
+                navigation.navigate("Register");
+              }}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    width: "100%",
   },
 });
