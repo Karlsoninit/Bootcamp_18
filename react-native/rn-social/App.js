@@ -8,6 +8,7 @@ import { HomeScreen } from "./screens/HomeScreen";
 import { BlogScreen } from "./screens/BlogScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 import { LoginScreen } from "./screens/LoginScreen";
+import { RegisterScreen } from "./screens/RegisterScreen";
 import { MainScreen } from "./screens/tab/MainScreen";
 import { MapScreen } from "./screens/tab/MapScreen";
 import { CreateScreen } from "./screens/tab/CreateScreen";
@@ -60,8 +61,11 @@ let content = (
         ),
       }}
       name="Create"
-      component={CreateScreen}
-    />
+    >
+      {(props) => {
+        return <CreateScreen {...props} />;
+      }}
+    </Tab.Screen>
     <Tab.Screen
       options={{
         tabBarIcon: ({ focused, size, color }) => (
@@ -84,14 +88,21 @@ const useRoute = (isAuth) => {
   }
   return (content = (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Login"
+        component={LoginScreen}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Register"
+        component={RegisterScreen}
+      />
     </Stack.Navigator>
   ));
 };
 
 export default function App() {
-  const [isAuth, setIsAuth] = useState(true);
-
-  const routing = useRoute(true);
+  const routing = useRoute(false);
   return <NavigationContainer>{routing}</NavigationContainer>;
 }

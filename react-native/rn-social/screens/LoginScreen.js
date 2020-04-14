@@ -1,11 +1,29 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Button,
+  TextInput,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from "react-native";
 
 export const LoginScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <Text>Login</Text>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.Os == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <View>
+          <TextInput placeholder="email" />
+          <TextInput secureTextEntry={true} placeholder="password" />
+          <Button title="go to Register" onPress={() => Keyboard.dismiss()} />
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
