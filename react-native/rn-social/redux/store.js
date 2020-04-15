@@ -7,6 +7,7 @@ import {
 const initialState = {
   userName: null,
   userId: null,
+  userPosts: [],
 };
 
 const reducer = {
@@ -16,8 +17,10 @@ const reducer = {
       ...state,
       userName: payload.userName,
       userId: payload.userId,
+      userPosts: payload.userPosts,
     };
   },
+  USER_SIGNOUT: () => initialState,
 };
 
 const user = createReducer(initialState, reducer);

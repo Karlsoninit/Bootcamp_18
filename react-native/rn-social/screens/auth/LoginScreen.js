@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 
-import { db } from "../../firebase/config";
+import { auth } from "../../firebase/config";
 
 const initialState = {
   email: "",
@@ -25,7 +25,7 @@ export const LoginScreen = ({ navigation }) => {
     console.log("email", email);
     console.log("password", password);
     try {
-      await db.auth().signInWithEmailAndPassword(email, password);
+      await auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
       console.log(error);
     }

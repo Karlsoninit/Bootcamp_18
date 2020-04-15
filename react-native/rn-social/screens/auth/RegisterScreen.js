@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 
-import { db } from "../../firebase/config";
+import { auth } from "../../firebase/config";
 
 const initialState = {
   email: "",
@@ -33,12 +33,12 @@ export const RegisterScreen = ({ navigation }) => {
   }, []);
 
   const currentUser = async () => {
-    const currentUser = await db.auth().currentUser;
+    const currentUser = await auth.currentUser;
     console.log("currentUser", currentUser);
   };
 
   const addIfo = async () => {
-    const updateUser = await db.auth().currentUser.updateProfile({
+    const updateUser = await auth.currentUser.updateProfile({
       displayName: "Maksim",
       photoURL:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.vexels.com%2Fmedia%2Fusers%2F3%2F145908%2Fpreview2%2F52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg&f=1&nofb=1",
@@ -49,9 +49,7 @@ export const RegisterScreen = ({ navigation }) => {
   const registerUser = async () => {
     const { email, password, displayName } = state;
     try {
-      const user = await db
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const user = await auth.createUserWithEmailAndPassword(email, password);
       console.log("user", user);
       await user.user.updateProfile({
         displayName: displayName,

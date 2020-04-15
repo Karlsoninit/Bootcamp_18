@@ -12,7 +12,7 @@ import { MainScreen } from "./screens/home/MainScreen";
 import { ProfileScreen } from "./screens/home/ProfileScreen";
 import { CreateScreen } from "./screens/home/CreateScreen";
 import { store } from "./redux/store";
-import { db } from "./firebase/config";
+import { auth } from "./firebase/config";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +25,7 @@ export default function App() {
   }, [isAuth]);
 
   const AuthStateChanged = async () => {
-    await db.auth().onAuthStateChanged((user) => {
+    await auth.onAuthStateChanged((user) => {
       // console.log(" --- user onAuthStateChanged ---", isAuth);
       setIsAuth(user);
     });
