@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase/config";
 
 export const MainScreen = () => {
-  const [name, setname] = useState("");
+  const dispatch = useDispatch();
   useEffect(() => {
     currentUser();
   }, []);
 
   const currentUser = async () => {
     const currentUser = await db.auth().currentUser;
-    console.log("currentUser inner nain screen", currentUser);
-    setname(currentUser.displayName);
+    console.log("currentUser inner nain screen", currentUser.displayName);
+    console.log("currentUser inner nain screen", currentUser.uid);
+    dispatch({
+      type: "CURRENT_USER",
+      payload: { userName: currentUser.displayName, userId: currentUser.uid },
+    });
   };
 
   const signOut = async () => {
@@ -20,7 +25,7 @@ export const MainScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>hello {name}</Text>
+      <Text>hello</Text>
       <Button title="logOut" onPress={signOut} />
     </View>
   );

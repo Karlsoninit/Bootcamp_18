@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export const MapScreen = () => {
+export const ProfileScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>MapScreen</Text>
+      <Text>Profile</Text>
     </View>
   );
 };

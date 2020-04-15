@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 
-import { db } from "../firebase/config";
+import { db } from "../../firebase/config";
 
 const initialState = {
   email: "",
@@ -35,7 +35,7 @@ export const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={{ ...StyleSheet.absoluteFill }}>
         <Image
-          source={require("../assets/images/triangles.png")}
+          source={require("../../assets/images/triangles.png")}
           style={{ flex: 1, width: null, height: null }}
         />
       </View>
