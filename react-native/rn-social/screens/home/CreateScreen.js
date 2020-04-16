@@ -1,27 +1,132 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { firestore } from "../../firebase/config";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { firestore, storage } from "../../firebase/config";
 import { useSelector } from "react-redux";
+import { Camera } from "expo-camera";
+import * as Location from "expo-location";
 
 export const CreateScreen = () => {
   const { userId, userName } = useSelector((state) => state.user);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [takePhoto, settakePhoto] = useState("");
+  const [photo, setphoto] = useState("");
+  // const [location, setlocation] = useState(null);
 
-  const addPosts = async () => {
-    await firestore.collection("posts").add({
-      image:
-        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fres.cloudinary.com%2Fwilderness-travel%2Fimage%2Fupload%2Fc_scale%2Cdpr_auto%2Cw_auto%2Ff_auto%2Cq_auto%2Fv1%2Ftrips%2Feurope%2Fitaly%2Famalfi-and-capri%2F1-slide-italy-capri-amalfi-coast-hill-side-pano&f=1&nofb=1",
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      console.log(status === "granted");
+      console.log("status", status);
+    })();
+  }, []);
 
-      like: "90",
-      userId: userId,
-      userName: userName,
-      status: true,
-    });
+  // useEffect(() => {
+  //   (async () => {
+  //     let { status } = await Location.requestPermissionsAsync();
+  //     if (status !== "granted") {
+  //       console.log("Permission to access location was denied");
+  //     }
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     setlocation(location);
+  //   })();
+  // });
+
+  const snap = async () => {
+    if (takePhoto) {
+      let file = await takePhoto.takePictureAsync();
+
+      setphoto(file.uri);
+      uploadStorage(file.uri);
+    }
   };
 
+  const uploadStorage = async (img) => {
+    const response = await fetch(img);
+    const file = await response.blob(response);
+
+    const uploadTask = await storage.ref(`image/${"travelOne"}`).put(file);
+    uploadTask;
+
+    console.log("storageRef", storageRef);
+    // uploadTask.on(
+    //   "state_changed",
+    //   (snapshot) => {},
+    //   (error) => {},
+    //   () => {
+    //     storage
+    //       .ref("image")
+    //       .child("travelOne")
+    //       .getDownloadURL()
+    //       .then((url) => console.log(url));
+    //   }
+    // );
+  };
+
+  const createPost = async () => {
+    // let { status } = await Location.requestPermissionsAsync();
+    // if (status === "granted") {}
+    //   let location = await Location.getCurrentPositionAsync({});
+    // await firestore.collection("travel").add({
+    //   image: photo,
+    //   userId,
+    //   userName,
+    //   test: "test",
+    // });
+  };
+
+  console.log("photo ---->>", photo);
   return (
     <View style={styles.container}>
       <Text>CreateScreen</Text>
-      <Button title="Add post" onPress={addPosts} />
+
+      <Camera
+        ref={(ref) => settakePhoto(ref)}
+        style={{ width: 350, height: 300 }}
+        type={type}
+      >
+        <TouchableOpacity
+          style={{
+            flex: 0.1,
+            alignSelf: "flex-end",
+            alignItems: "center",
+          }}
+          onPress={() => {
+            setType(
+              type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+            );
+          }}
+        >
+          <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+            Flip
+          </Text>
+        </TouchableOpacity>
+      </Camera>
+
+      <Button title="Snap" onPress={snap} />
+
+      <TouchableOpacity
+        onPress={createPost}
+        style={{
+          padding: 10,
+          height: 40,
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: "green",
+        }}
+      >
+        <Text>CREATE POST</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -35,10 +140,5 @@ const styles = StyleSheet.create({
   },
 });
 
-// {
-//   image: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fkapets.net%2Fwp-content%2Fuploads%2F2019%2F04%2Ftravel-editor-favorite-products.jpg&f=1&nofb=1";
-
-//   like: "78";
-//   userId: "TGpEe1Dg8EPnvAcRSVr33gd7FJW2";
-//   userName: "Bob";
-// }
+// "latitude": 50.38243008321989,
+// "longitude": 30.47454375841054,

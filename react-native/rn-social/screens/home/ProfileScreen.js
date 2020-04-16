@@ -1,17 +1,56 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { CollectionDrawing } from "../../components/CollectionDrawing";
+import { useSelector } from "react-redux";
+import { auth, firestore } from "../../firebase/config";
 
 export const ProfileScreen = () => {
+  const [currentUserPost, setcurrentUserPost] = useState([]);
+
+  const { userId } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    getCurrentUserPosts();
+  }, [userId]);
+
+  const getCurrentUserPosts = async () => {
+    await firestore
+      .collection("posts")
+      .where("userId", "==", userId)
+      .onSnapshot((data) =>
+        setcurrentUserPost(data.docs.map((doc) => doc.data()))
+      );
+  };
+
+  const signOut = async () => {
+    await auth.signOut();
+    dispatch({ type: "USER_SIGNOUT" });
+  };
+
   return (
     <View style={styles.container}>
       <Text>Profile</Text>
+      <TouchableOpacity
+        style={{
+          marginTop: 100,
+          borderColor: "green",
+          borderWidth: 1,
+          padding: 10,
+          borderRadius: 10,
+        }}
+        onPress={signOut}
+      >
+        <Text>SignOut</Text>
+      </TouchableOpacity>
+      <View style={{ marginTop: 400 }}>
+        <CollectionDrawing data={currentUserPost} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
