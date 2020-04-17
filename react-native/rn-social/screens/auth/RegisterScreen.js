@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
 import { auth } from "../../firebase/config";
 
@@ -21,6 +23,29 @@ const initialState = {
 export const RegisterScreen = ({ navigation }) => {
   const [state, setState] = useState(initialState);
   const [message, setmessage] = useState(null);
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    getPermissionAsync();
+  }, []);
+
+  const getPermissionAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+    }
+  };
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log("result", result);
+    setAvatar(result.uri);
+  };
 
   const currentState = () => {
     // console.log("state", state);
@@ -37,15 +62,6 @@ export const RegisterScreen = ({ navigation }) => {
     console.log("currentUser", currentUser);
   };
 
-  const addIfo = async () => {
-    const updateUser = await auth.currentUser.updateProfile({
-      displayName: "Maksim",
-      photoURL:
-        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.vexels.com%2Fmedia%2Fusers%2F3%2F145908%2Fpreview2%2F52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg&f=1&nofb=1",
-    });
-    console.log("updateUser", updateUser);
-  };
-
   const registerUser = async () => {
     const { email, password, displayName } = state;
     try {
@@ -53,6 +69,7 @@ export const RegisterScreen = ({ navigation }) => {
       console.log("user", user);
       await user.user.updateProfile({
         displayName: displayName,
+        photoURL: avatar,
       });
     } catch (error) {
       console.log(error);
@@ -69,6 +86,20 @@ export const RegisterScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.form}>
+        <TouchableOpacity onPress={takePhoto}>
+          <Image
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              marginBottom: 30,
+            }}
+            source={{
+              uri:
+                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffortnitenews.com%2Fcontent%2Fimages%2F2018%2F11%2Fdefault.png&f=1&nofb=1",
+            }}
+          />
+        </TouchableOpacity>
         <TextInput
           style={{ ...styles.input, marginBottom: 20 }}
           placeholder="enter displayName"
