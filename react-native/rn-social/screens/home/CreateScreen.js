@@ -27,58 +27,49 @@ export const CreateScreen = () => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     let { status } = await Location.requestPermissionsAsync();
-  //     if (status !== "granted") {
-  //       console.log("Permission to access location was denied");
-  //     }
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setlocation(location);
-  //   })();
-  // });
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+    })();
+  });
 
   const snap = async () => {
     if (takePhoto) {
       let file = await takePhoto.takePictureAsync();
 
       setphoto(file.uri);
-      uploadStorage(file.uri);
+      handleUpload(file.uri);
     }
   };
 
-  const uploadStorage = async (img) => {
+  const handleUpload = async (img) => {
     const response = await fetch(img);
-    const file = await response.blob(response);
+    const file = await response.blob();
 
-    const uploadTask = await storage.ref(`image/${"travelOne"}`).put(file);
-    uploadTask;
+    const uniqueId = Date.now().toString();
 
-    console.log("storageRef", storageRef);
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapshot) => {},
-    //   (error) => {},
-    //   () => {
-    //     storage
-    //       .ref("image")
-    //       .child("travelOne")
-    //       .getDownloadURL()
-    //       .then((url) => console.log(url));
-    //   }
-    // );
+    await storage.ref(`image/${uniqueId}`).put(file);
+
+    const url = await storage.ref("image").child(uniqueId).getDownloadURL();
+    console.log("url", url);
+    createPost(url);
   };
 
-  const createPost = async () => {
-    // let { status } = await Location.requestPermissionsAsync();
-    // if (status === "granted") {}
-    //   let location = await Location.getCurrentPositionAsync({});
-    // await firestore.collection("travel").add({
-    //   image: photo,
-    //   userId,
-    //   userName,
-    //   test: "test",
-    // });
+  const createPost = async (img) => {
+    let location = await Location.getCurrentPositionAsync({});
+
+    await firestore.collection("posts").add({
+      image: img,
+      userId,
+      userName,
+      location: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      },
+    });
   };
 
   console.log("photo ---->>", photo);
@@ -139,6 +130,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-// "latitude": 50.38243008321989,
-// "longitude": 30.47454375841054,
