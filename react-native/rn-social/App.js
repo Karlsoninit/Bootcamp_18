@@ -26,7 +26,7 @@ export default function App() {
 
   const AuthStateChanged = async () => {
     await auth.onAuthStateChanged((user) => {
-      // console.log(" --- user onAuthStateChanged ---", isAuth);
+      console.log("user", user);
       setIsAuth(user);
     });
   };

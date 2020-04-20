@@ -11,19 +11,18 @@ import { firestore, storage } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
+import { TextInput } from "react-native-gesture-handler";
 
 export const CreateScreen = () => {
-  const { userId, userName } = useSelector((state) => state.user);
+  const { userId, userName, avatar } = useSelector((state) => state.user);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [takePhoto, settakePhoto] = useState("");
   const [photo, setphoto] = useState("");
-  // const [location, setlocation] = useState(null);
+  const [postDescription, setPostDescription] = useState("");
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      console.log(status === "granted");
-      console.log("status", status);
     })();
   }, []);
 
@@ -39,7 +38,6 @@ export const CreateScreen = () => {
   const snap = async () => {
     if (takePhoto) {
       let file = await takePhoto.takePictureAsync();
-
       setphoto(file.uri);
       handleUpload(file.uri);
     }
@@ -49,13 +47,29 @@ export const CreateScreen = () => {
     const response = await fetch(img);
     const file = await response.blob();
 
-    const uniqueId = Date.now().toString();
+    const uniquePostsId = Date.now().toString();
 
-    await storage.ref(`image/${uniqueId}`).put(file);
+    await storage.ref(`image/${uniquePostsId}`).put(file);
 
-    const url = await storage.ref("image").child(uniqueId).getDownloadURL();
-    console.log("url", url);
-    createPost(url);
+    const urlPosts = await storage
+      .ref("image")
+      .child(uniquePostsId)
+      .getDownloadURL();
+
+    createPost(urlPosts);
+  };
+
+  const uploadPrifileAvatar = async () => {
+    const avatarDownload = await fetch(avatar);
+    const fileAvatar = await avatarDownload.blob();
+    const uniqueAvatarId = Date.now().toString();
+
+    await storage.ref(`image/${uniqueAvatarId}`).put(fileAvatar);
+
+    const urlAvatar = await storage
+      .ref("image")
+      .child(uniqueAvatarId)
+      .getDownloadURL();
   };
 
   const createPost = async (img) => {
@@ -69,14 +83,18 @@ export const CreateScreen = () => {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       },
+      avatar: "",
+      comment: ["cool"],
+      description: postDescription,
     });
   };
 
-  console.log("photo ---->>", photo);
+  const updatePostDescription = (value) => {
+    setPostDescription(value);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>CreateScreen</Text>
-
       <Camera
         ref={(ref) => settakePhoto(ref)}
         style={{ width: 350, height: 300 }}
@@ -103,7 +121,10 @@ export const CreateScreen = () => {
       </Camera>
 
       <Button title="Snap" onPress={snap} />
-
+      <TextInput
+        placeholder="commmmmmmmmment"
+        onChangeText={updatePostDescription}
+      />
       <TouchableOpacity
         onPress={createPost}
         style={{

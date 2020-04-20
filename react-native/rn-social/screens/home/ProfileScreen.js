@@ -29,31 +29,18 @@ export const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
-
-      <TouchableOpacity
-        style={{
-          marginTop: 100,
-          borderColor: "green",
-          borderWidth: 1,
-          padding: 10,
-          borderRadius: 10,
+      <Image
+        style={styles.avatar}
+        source={{
+          uri: avatar
+            ? avatar
+            : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fe%2Fe8%2FCandymyloveYasu.png&f=1&nofb=1",
         }}
-        onPress={signOut}
-      >
+      />
+
+      <TouchableOpacity style={styles.btn} onPress={signOut}>
         <Text>SignOut</Text>
       </TouchableOpacity>
-
-      <Image
-        style={{
-          width: 350,
-          height: 200,
-          marginTop: 140,
-          marginBottom: 10,
-          borderRadius: 10,
-        }}
-        source={{ uri: avatar }}
-      />
 
       <View style={{ marginTop: 400 }}>
         <CollectionDrawing data={currentUserPost} />
@@ -65,7 +52,21 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
+    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+  },
+  avatar: {
+    width: 350,
+    height: 200,
+    marginTop: 40,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  btn: {
+    marginTop: 30,
+    borderColor: "green",
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   TouchableOpacity,
@@ -10,17 +10,18 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
-import { firestore } from "../firebase/config";
 import { useNavigation } from "@react-navigation/native";
+// import { useWindowDimensions } from "react-native";
+import { firestore } from "../firebase/config";
 
 export const CollectionDrawing = ({ data }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
   const navigation = useNavigation();
-  console.log("navigation", navigation);
 
   const getCurrentUserPost = async (id) => {
     const data = await firestore.collection("posts").doc(id).get();
-    console.log("data.data(", data);
+
     await firestore
       .collection("posts")
       .doc(id)
@@ -30,70 +31,71 @@ export const CollectionDrawing = ({ data }) => {
   };
 
   return (
-    <FlatList
-      data={data}
-      keyExtractor={(item, indx) => indx.toString()}
-      renderItem={({ item }) => {
-        // console.log("post", item);
-        return (
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onLongPress={() => navigation.navigate("Map", { info: item })}
-            style={styles.postContainer}
-          >
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={data}
+        keyExtractor={(item, indx) => indx.toString()}
+        renderItem={({ item }) => {
+          return (
             <TouchableOpacity
-              style={styles.like}
-              onPress={() => getCurrentUserPost(item.id)}
+              activeOpacity={0.7}
+              onLongPress={() => navigation.navigate("Map", { info: item })}
+              style={styles.postContainer}
             >
-              <Text>{item.likes}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              // style={styles.like}
-              onPress={() => navigation.navigate("Comments")}
-            >
-              <Text>COMMENTS</Text>
-            </TouchableOpacity>
-            <Image style={styles.image} source={{ uri: item.image }} />
-            <Modal
-              style={styles.centeredView}
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
-            >
-              <View>
-                <View
-                  style={{
-                    backgroundColor: "#2196F3",
-                    width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <TouchableHighlight
-                    style={{ marginTop: 50 }}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
+              <TouchableOpacity
+                style={styles.like}
+                onPress={() => getCurrentUserPost(item.id)}
+              >
+                <Text>{item.likes}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                // style={styles.like}
+                onPress={() => navigation.navigate("Comments", { item })}
+              >
+                <Text>COMMENTS</Text>
+              </TouchableOpacity>
+              <Image style={styles.image} source={{ uri: item.image }} />
+              <Modal
+                style={styles.centeredView}
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                }}
+              >
+                <View>
+                  <View
+                    style={{
+                      backgroundColor: "#2196F3",
+                      width: "100%",
+                      height: "100%",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
-                    <View>
-                      <Text>Hide Modal</Text>
-                      <Image
-                        style={styles.image}
-                        source={{ uri: item.image }}
-                      />
-                    </View>
-                  </TouchableHighlight>
+                    <TouchableHighlight
+                      style={{ marginTop: 50 }}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <View>
+                        <Text>Hide Modal</Text>
+                        <Image
+                          style={styles.image}
+                          source={{ uri: item.image }}
+                        />
+                      </View>
+                    </TouchableHighlight>
+                  </View>
                 </View>
-              </View>
-            </Modal>
-          </TouchableOpacity>
-        );
-      }}
-    />
+              </Modal>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </View>
   );
 };
 

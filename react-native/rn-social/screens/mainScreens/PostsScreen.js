@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, View } from "react-native";
+import { useDispatch } from "react-redux";
 import { auth, firestore } from "../../firebase/config";
 import { CollectionDrawing } from "../../components/CollectionDrawing";
 
@@ -20,8 +20,6 @@ export const PostsScreen = () => {
   const currentUser = async () => {
     const currentUser = await auth.currentUser;
 
-    console.log("currentUser ----------------------> ", currentUser);
-
     dispatch({
       type: "CURRENT_USER",
       payload: {
@@ -36,7 +34,6 @@ export const PostsScreen = () => {
     await firestore.collection("posts").onSnapshot((data) => {
       setAllPosts(
         data.docs.map((doc) => {
-          console.log(doc.id);
           return { ...doc.data(), id: doc.id };
         })
       );

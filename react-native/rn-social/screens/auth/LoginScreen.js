@@ -22,8 +22,7 @@ export const LoginScreen = ({ navigation }) => {
 
   const loginUser = async () => {
     const { email, password } = state;
-    console.log("email", email);
-    console.log("password", password);
+
     try {
       await auth.signInWithEmailAndPassword(email, password);
     } catch (error) {

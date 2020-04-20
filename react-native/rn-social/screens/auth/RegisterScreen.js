@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import { useDispatch } from "react-redux";
 
 import { auth } from "../../firebase/config";
 
@@ -24,6 +25,7 @@ export const RegisterScreen = ({ navigation }) => {
   const [state, setState] = useState(initialState);
   const [message, setmessage] = useState(null);
   const [avatar, setAvatar] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getPermissionAsync();
@@ -43,30 +45,32 @@ export const RegisterScreen = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log("result", result);
+
     setAvatar(result.uri);
   };
 
-  const currentState = () => {
-    // console.log("state", state);
-    Alert.alert(JSON.stringify(state));
-    setState(initialState);
-  };
-
-  useEffect(() => {
-    currentUser();
-  }, []);
+  // useEffect(() => {
+  //   currentUser();
+  // }, []);
 
   const currentUser = async () => {
     const currentUser = await auth.currentUser;
     console.log("currentUser", currentUser);
+    dispatch({
+      type: "CURRENT_USER",
+      payload: {
+        userName: currentUser.displayName,
+        userId: currentUser.uid,
+        avatar: currentUser.photoURL,
+      },
+    });
   };
 
   const registerUser = async () => {
     const { email, password, displayName } = state;
     try {
       const user = await auth.createUserWithEmailAndPassword(email, password);
-      console.log("user", user);
+
       await user.user.updateProfile({
         displayName: displayName,
         photoURL: avatar,
@@ -75,6 +79,7 @@ export const RegisterScreen = ({ navigation }) => {
       console.log(error);
       setmessage(error.message);
     }
+    currentUser();
   };
 
   return (
